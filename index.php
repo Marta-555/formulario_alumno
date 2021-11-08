@@ -8,6 +8,8 @@
 </head>
 <body>
     <?php
+        include "../entidades/alumno.php";
+
         //Comprobamos los datos del POST
         if(isset($_POST['enviar'])){
             //-------------------
@@ -19,15 +21,18 @@
             $fecha = isset($_POST['fecha'])? $_POST['fecha']:"";
             $dni = isset($_POST['dni'])? $_POST['dni']:"";
             $email = isset($_POST['email'])? $_POST['email']:"";
+            $url = isset($_POST['url'])? $_POST['url']:"";
             $modulos = isset($_POST['modulos'])? $_POST['modulos']:"";
-            
+
+            $alumno = new Alumno($nombre, $apellidos, $fecha, $dni, $email, $url, $modulos);
+            $alumno->muestra();
 
             //--------------------------
             //  Validamos el formulario
             //--------------------------
             //Nombre
             if(!validarTexto($nombre)){
-                $errores[] = "El nombre no puede estar vacío";
+                $errores[] = "Creando conflicto";
             }
             //Apellidos
             if(!validarTexto($apellidos)){
@@ -45,6 +50,15 @@
             if(!validarEmail($email)){
                 $errores[] = "El email está vacío o no tiene un formato válido";
             }
+            //URL
+            if(!validarURL($url)){
+                $errores[] = "La URL está vacía o no tiene un formato válido";
+            /*} else {
+                if(!urlExiste($url)){
+                    $errores[] = "La URL introducida no existe.";
+                }*/
+            }
+
             //Modulos
             if(empty($modulos)){
                 $errores[] = "Debe escoger al menos un módulo.";
@@ -53,7 +67,7 @@
         }
 
     ?>
-   
+
     <!-------Mostramos errores------->
     <?php
     if(isset($errores)){
@@ -68,7 +82,7 @@
     <h3>---Datos del alumno---</h3>
 
     <form action="" method="POST">
-        
+
     <!----Campo nombre-->
         <p>Nombre: <input type="text" name="nombre" value="<?php
                 if(empty($_POST['nombre'])){
@@ -78,7 +92,7 @@
                 }
             ?>">
         </p>
-        
+
         <!----Campo apellidos--->
         <p>Apellidos: <input type="text" name="apellidos" value="<?php
                 if(empty($_POST['apellidos'])){
@@ -119,9 +133,19 @@
             ?>">
         </p>
 
+        <!----Campo URL--->
+        <p>URL: <input type="text" name="url" placeholder="http://ejemplo.com" value="<?php
+                if(empty($_POST['url'])){
+                    echo '""';
+                } else {
+                    echo $_POST['url'];
+                }
+            ?>">
+        </p>
+
         <!----Campo módulos--->
         <p>Módulos que cursa: </p>
-            
+
         <p>
             <input type="checkbox" name="modulos[]" value="DWEC"
                 <?php
@@ -157,10 +181,10 @@
                          echo 'checked="checked"';
                     }
                ?>
-            /> 
+            />
             EIE
         </p>
-        
+
         <!---Botón---->
         <p><input type="submit" name= "enviar" value="Enviar"></p>
 
@@ -181,7 +205,7 @@
     }
     //Método para validar dni
     function validarDni($texto){
-        
+
         if(preg_match("|\d{8}[A-Z]$|", $texto)){
             return true;
         } else {
@@ -196,6 +220,26 @@
             return true;
         }
     }
+    //Método para validar URL
+    function validarURL($texto){
+        if(filter_var($texto, FILTER_VALIDATE_URL) == false){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /*function urlExiste($texto){
+        $partes = parse_url($_POST['url']);
+        /*if(gethostbyname(partes['host'])){
+            return true;
+        }
+        var_dump($partes);
+
+    }
+    var_dump($_POST);
+    */
+
 ?>
 
 </html>
