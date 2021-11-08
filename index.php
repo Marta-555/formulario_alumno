@@ -32,7 +32,7 @@
             //--------------------------
             //Nombre
             if(!validarTexto($nombre)){
-                $errores[] = "conflicto";
+                $errores[] = "El nombre no puede estar vacío";
             }
             //Apellidos
             if(!validarTexto($apellidos)){
