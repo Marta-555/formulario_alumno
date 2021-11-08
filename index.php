@@ -32,7 +32,7 @@
             //--------------------------
             //Nombre
             if(!validarTexto($nombre)){
-                $errores[] = "Creando conflicto";
+                $errores[] = "hkg,g,";
             }
             //Apellidos
             if(!validarTexto($apellidos)){
